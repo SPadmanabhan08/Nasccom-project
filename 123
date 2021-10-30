@@ -6,24 +6,24 @@ x = data['YearsExperience']
 y = data['Salary']
 print(data.head()) \\will show first few rows of data
 def linear_regression(x, y):     \\converting formula to python code
-    N = len(x)
-    x_mean = x.mean()
+    N = len(x) \\ gives no . of observation
+    x_mean = x.mean() \\ calculates mean of x and y using mean function
     y_mean = y.mean()
     
-    B1_num = ((x - x_mean) * (y - y_mean)).sum()
-    B1_den = ((x - x_mean)**2).sum()
-    B1 = B1_num / B1_den
+    B1_num = ((x - x_mean) * (y - y_mean)).sum() \\ calculating b1 numerator
+    B1_den = ((x - x_mean)**2).sum() \\caculating b1 denominator
+    B1 = B1_num / B1_den 
     
-    B0 = y_mean - (B1*x_mean)
+    B0 = y_mean - (B1*x_mean) \\ intercept b0 slope
     
-    reg_line = 'y = {} + {}β'.format(B0, round(B1, 3))
+    reg_line = 'y = {} + {}β'.format(B0, round(B1, 3)) \\ calculating regression line
     
     return (B0, B1, reg_line)
 def corr_coef(x, y):
     N = len(x)
     
     num = (N * (x*y).sum()) - (x.sum() * y.sum())
-    den = np.sqrt((N * (x**2).sum() - x.sum()**2) * (N * (y**2).sum() - y.sum()**2))
+    den = np.sqrt((N * (x**2).sum() - x.sum()**2) * (N * (y**2).sum() - y.sum()**2)) \\ converting pearson correlation formula to python code
     R = num / den
     return R
     B0, B1, reg_line = linear_regression(x, y)
@@ -31,21 +31,3 @@ print('Regression Line: ', reg_line)
 R = corr_coef(x, y)
 print('Correlation Coef.: ', R)
 print('"Goodness of Fit": ', R**2)
-plt.figure(figsize=(12,5))
-plt.scatter(x, y, s=300, linewidths=1, edgecolor='black')
-text = '''X Mean: {} Years
-Y Mean: ${}
-R: {}
-R^2: {}
-y = {} + {}X'''.format(round(x.mean(), 2), 
-                       round(y.mean(), 2), 
-                       round(R, 4), 
-                       round(R**2, 4),
-                       round(B0, 3),
-                       round(B1, 3))
-plt.text(x=1, y=100000, s=text, fontsize=12, bbox={'facecolor': 'grey', 'alpha': 0.2, 'pad': 10})
-plt.title('How Experience Affects Salary')
-plt.xlabel('Years of Experience', fontsize=15)
-plt.ylabel('Salary', fontsize=15)
-plt.plot(x, B0 + B1*x, c = 'r', linewidth=5, alpha=.5, solid_capstyle='round')
-plt.scatter(x=x.mean(), y=y.mean(), marker='*', s=10**2.5, c='r') # average point
