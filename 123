@@ -1,33 +1,49 @@
-import numpy as np  #importing the libraries
-import pandas as pd
+# Simple Linear Regression
+# Importing the libraries
+
+import numpy as np
 import matplotlib.pyplot as plt
-data = pd.read_csv('Salary_Data.csv') # loading the data from excel. Source:https://www.kaggle.com/karthickveerakumar/salary-data-simple-linear-regression/version/1
-x = data['YearsExperience']
-y = data['Salary']
-print(data.head()) #will show first few rows of data
-def linear_regression(x, y):     #converting formula to python code
-    N = len(x) \\ gives no . of observation
-    x_mean = x.mean() #calculates mean of x and y using mean function
-    y_mean = y.mean()
-    
-    B1_num = ((x - x_mean) * (y - y_mean)).sum() #calculating b1 numerator
-    B1_den = ((x - x_mean)**2).sum() #caculating b1 denominator
-    B1 = B1_num / B1_den 
-    
-    B0 = y_mean - (B1*x_mean) #intercept b0 slope
-    
-    reg_line = 'y = {} + {}β'.format(B0, round(B1, 3)) # calculating regression line
-    
-    return (B0, B1, reg_line)
-def corr_coef(x, y):
-    N = len(x)
-    
-    num = (N * (x*y).sum()) - (x.sum() * y.sum())
-    den = np.sqrt((N * (x**2).sum() - x.sum()**2) * (N * (y**2).sum() - y.sum()**2)) # converting pearson correlation formula to python code
-    R = num / den
-    return R
-    B0, B1, reg_line = linear_regression(x, y)
-print('Regression Line: ', reg_line)
-R = corr_coef(x, y)
-print('Correlation Coef.: ', R)
-print('"Goodness of Fit": ', R**2)
+import pandas as pd
+
+# Importing the datasets
+# Sample dataset source:https://www.kaggle.com/karthickveerakumar/salary-data-simple-linear-regression
+
+datasets = pd.read_csv('C:\\Users\\pavit\\Downloads\\Salary_Data.csv') 
+
+X = datasets.iloc[:, :-1].values
+Y = datasets.iloc[:, 1].values
+
+# Splitting the dataset into the Training set and Test set
+
+from sklearn.model_selection import train_test_split
+
+X_Train, X_Test, Y_Train, Y_Test = train_test_split(X, Y, test_size=1 / 3, random_state=0)
+
+# Fitting Simple Linear Regression to the training set
+
+from sklearn.linear_model import LinearRegression
+
+regressor = LinearRegression()
+regressor.fit(X_Train, Y_Train)
+
+# Predicting the Test set result ￼
+
+Y_Pred = regressor.predict(X_Test)
+
+# Visualising the Training set results
+
+plt.scatter(X_Train, Y_Train, color='red')
+plt.plot(X_Train, regressor.predict(X_Train), color='blue')
+plt.title('Salary vs Experience  (Training Set)')
+plt.xlabel('Years of experience')
+plt.ylabel('Salary')
+plt.show()
+
+# Visualising the Test set results
+
+plt.scatter(X_Test, Y_Test, color='red')
+plt.plot(X_Train, regressor.predict(X_Train), color='blue')
+plt.title('Salary vs Experience  (Training Set)')
+plt.xlabel('Years of experience')
+plt.ylabel('Salary')
+plt.show()
